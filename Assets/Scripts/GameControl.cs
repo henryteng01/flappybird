@@ -9,10 +9,14 @@ public class GameControl : MonoBehaviour
     public static GameControl instance;
     public GameObject gameOverText;
     public Text scoreText;
+    public Text scoreText1;
+    public Text victoryText;
     public bool gameOver = false;
     public float scrollSpeed = -1.5f;
 
     private int score = 0;
+    private int score1 = 0;
+    private int deadBirds = 0;
 
     // Start is called before the first frame update
     void Awake()
@@ -43,12 +47,40 @@ public class GameControl : MonoBehaviour
             return;
         }
         ++score;
-        scoreText.text = "Score: " + score.ToString();
+        scoreText.text = "Player 1 Score: " + score.ToString();
+    }
+
+    public void BirdScored1()
+    {
+        if (gameOver)
+        {
+            return;
+        }
+        ++score1;
+        scoreText1.text = "Player 2 Score: " + score1.ToString();
     }
 
     public void BirdDied()
     {
-        gameOverText.SetActive(true);
-        gameOver = true;
+        ++deadBirds;
+
+        if (deadBirds >= 2)
+        {
+            if (score > score1)
+            {
+                victoryText.text = "Player 1 Wins!";
+            }
+            else if (score1 > score)
+            {
+                victoryText.text = "Player 2 Wins!";
+            }
+            else
+            {
+                victoryText.text = "Tie!";
+            }
+
+            gameOverText.SetActive(true);
+            gameOver = true;
+        }
     }
 }
